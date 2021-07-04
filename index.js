@@ -3,6 +3,7 @@ const app = express();
 const config = require("./config/index");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const { auth } = require("./middleware/auth");
 
 const { PORT, MONGO_URI } = config;
 
@@ -32,7 +33,7 @@ app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${PORT}`);
 });
 
-app.post("/register", (req, res) => {
+app.post("/api/user/register", (req, res) => {
   // 회원 가입을 할 때 필요한 정보를 client에서 가져오면
   // 그것을 데이터 베이스에 넣어준다.
 
@@ -43,7 +44,7 @@ app.post("/register", (req, res) => {
   });
 });
 
-app.post("/login", (req, res) => {
+app.post("/api/user/login", (req, res) => {
   // 요청된 이메일을 데이터 베이스에 있는지 찾는다.
   user.findOne({ email: req.body.email }, (err, userInfo) => {
     if (!userInfo) {
@@ -72,6 +73,29 @@ app.post("/login", (req, res) => {
       });
     });
   });
-
   // 비밀번호까지 맞다면 토큰을 생성하기.
+});
+
+app.get("/api/user/auth", auth, (req, res) => {
+  // 여기까지 미들웨어가 통과해 왔다는 이야기는 Authentication이 true라는 말
+  res.status(200).json({
+    _id: req.user._id,
+    isAdmin: req.user.role === 0 ? false : true,
+    isAuth: true,
+    email: req.user.email,
+    name: req.user.name,
+    lastname: req.user.lastname,
+    role: req.user.role,
+    image: req.user.image,
+  });
+});
+
+app.get("/api/user/logout", auth, (req, res) => {
+  console.log("req.user", req.user);
+  user.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
+    if (err) return res.json({ success: false, err });
+    return res.status(200).send({
+      success: true,
+    });
+  });
 });

@@ -56,7 +56,7 @@ userSchema.pre("save", function (next) {
 });
 
 userSchema.methods.comparePassword = function (plainPassword, cb) {
-  console.log("plainPassword", plainPassword);
+  // console.log("plainPassword", plainPassword);
   // 일치하는지 확인을 위해서는 입력한 password를 암호화를 해서 비교해야한다.
   bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
     if (err) return cb(err);
@@ -76,8 +76,21 @@ userSchema.methods.generateToken = function (cb) {
   user.token = token;
   user.save(function (err, user) {
     if (err) return cb(err);
-    console.log(user);
+    console.log("user", user);
     cb(null, user);
+  });
+};
+
+userSchema.statics.findByToken = function (token, cb) {
+  let user = this;
+  // 토큰을 docode 한다.
+  jwt.verify(token, "secreToken", function (err, decode) {
+    // 유저 아이디를 이용해서 유저를 찾은 다음에
+    // 클라이언트에서 가져온 token과 DB에 보관된 토큰이 일치하는지 확인
+    user.findOne({ _id: decode, token: token }, function (err, user) {
+      if (err) return cb(err);
+      cb(null, user);
+    });
   });
 };
 
