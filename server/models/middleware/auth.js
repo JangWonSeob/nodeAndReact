@@ -1,5 +1,5 @@
 const { TokenExpiredError } = require("jsonwebtoken");
-const { user } = require("../models/user");
+const { user } = require("../user");
 
 let auth = (req, res, next) => {
   // 인증 처리를 하는 곳

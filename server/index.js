@@ -3,7 +3,7 @@ const app = express();
 const config = require("./config/index");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-const { auth } = require("./middleware/auth");
+const { auth } = require("./models/middleware/auth");
 
 const { PORT, MONGO_URI } = config;
 
