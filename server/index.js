@@ -33,6 +33,10 @@ app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${PORT}`);
 });
 
+app.get("/api/hello", (req, res) => {
+  res.send("hellow world");
+});
+
 app.post("/api/user/register", (req, res) => {
   // 회원 가입을 할 때 필요한 정보를 client에서 가져오면
   // 그것을 데이터 베이스에 넣어준다.
@@ -69,7 +73,7 @@ app.post("/api/user/login", (req, res) => {
         res
           .cookie("x-auth", user.token)
           .status(200)
-          .json({ loginSucess: true, userId: user._id });
+          .json({ loginSuccess: true, userId: user._id });
       });
     });
   });
