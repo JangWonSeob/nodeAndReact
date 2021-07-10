@@ -51,6 +51,8 @@ app.post("/api/user/register", (req, res) => {
 app.post("/api/user/login", (req, res) => {
   // 요청된 이메일을 데이터 베이스에 있는지 찾는다.
   user.findOne({ email: req.body.email }, (err, userInfo) => {
+    console.log("req : ", req.body);
+    console.log("res : ", res);
     if (!userInfo) {
       return res.json({
         loginSucess: false,
