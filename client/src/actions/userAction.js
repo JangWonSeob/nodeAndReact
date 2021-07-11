@@ -5,7 +5,7 @@ export function loginUser(dataToSubmit) {
   const req = axios
     .post("/api/user/login", dataToSubmit)
     .then((res) => res.data);
-  console.log("dataToSubmit", dataToSubmit);
+  //console.log("dataToSubmit", dataToSubmit);
   return {
     type: LOGIN_USER,
     payload: req,
@@ -16,7 +16,7 @@ export function registerUser(dataToSubmit) {
   const req = axios
     .post("/api/user/register", dataToSubmit)
     .then((res) => res.data);
-  console.log("dataToSubmit", dataToSubmit);
+  //console.log("dataToSubmit", dataToSubmit);
   return {
     type: REGISTER_USER,
     payload: req,

@@ -8,7 +8,6 @@ export default function (state = {}, action) {
     case REGISTER_USER:
       return { ...state, registerSuccess: action.payload };
       break;
-
     default:
       return state;
   }

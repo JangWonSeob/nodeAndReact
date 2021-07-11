@@ -51,8 +51,8 @@ app.post("/api/user/register", (req, res) => {
 app.post("/api/user/login", (req, res) => {
   // 요청된 이메일을 데이터 베이스에 있는지 찾는다.
   user.findOne({ email: req.body.email }, (err, userInfo) => {
-    console.log("req : ", req.body);
-    console.log("res : ", res);
+    //console.log("req : ", req.body);
+    //console.log("res : ", res);
     if (!userInfo) {
       return res.json({
         loginSucess: false,
@@ -61,7 +61,8 @@ app.post("/api/user/login", (req, res) => {
     }
     // 요쳥된 이메일이 데이터 베이스에 있다면 비밀번호가 맞는 비밀번호인지 확인
     userInfo.comparePassword(req.body.password, (err, isMatch) => {
-      console.log("err", err);
+      //console.log("isMatch", isMatch);
+      //console.log("err", err);
       console.log("isMatch", isMatch);
       if (!isMatch)
         return res.json({
@@ -73,9 +74,11 @@ app.post("/api/user/login", (req, res) => {
 
         // 토큰을 저장한다. 어디에 ? 쿠키(이걸 사용), 로컬스토리지
         res
-          .cookie("x-auth", user.token)
+          .cookie("x_auth", user.token)
           .status(200)
           .json({ loginSuccess: true, userId: user._id });
+
+        console.log("user.token", user.token);
       });
     });
   });
@@ -97,7 +100,6 @@ app.get("/api/user/auth", auth, (req, res) => {
 });
 
 app.get("/api/user/logout", auth, (req, res) => {
-  console.log("req.user", req.user);
   user.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
     if (err) return res.json({ success: false, err });
     return res.status(200).send({

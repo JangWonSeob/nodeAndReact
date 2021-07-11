@@ -1,4 +1,3 @@
-const { TokenExpiredError } = require("jsonwebtoken");
 const { user } = require("../user");
 
 let auth = (req, res, next) => {
